@@ -1,7 +1,3 @@
-//
-// Created by jakub on 03.01.17.
-//
-
 #ifndef SK2_DROPBOX_GLOBAL_DATA_H
 #define SK2_DROPBOX_GLOBAL_DATA_H
 
@@ -19,4 +15,4 @@ struct socket_message {
 
 };
 
-#endif //SK2_DROPBOX_GLOBAL_DATA_H
+#endif // SK2_DROPBOX_GLOBAL_DATA_H
