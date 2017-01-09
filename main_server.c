@@ -20,7 +20,6 @@ int init();
 void *client_loop(void *arg);
 
 int main(int argc, char *argv[]) {
-
     int sockfd, clientSockFd;
     struct sockaddr_in cli_addr;
     socklen_t nTmp = sizeof(cli_addr);

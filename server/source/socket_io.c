@@ -6,7 +6,6 @@
 #include "../header/global_data.h"
 
 char *preapare_path(char *directory, char *filename) {
-
     char *fullpath = (char *) malloc(BUFFER_LEN);
 
     strncpy(fullpath, "files/", 7);
@@ -37,7 +36,6 @@ void close_file(FILE *fp) {
  * Write file with name 'filename' in 'directory' to socket 'socketfd'
  */
 void send_file(int sockfd, char *directory, char *filename) {
-
     char buffer[BUFFER_LEN];
     int bufsize = BUFFER_LEN;
     int i;
@@ -64,7 +62,6 @@ void send_file(int sockfd, char *directory, char *filename) {
  * returns 1 on success and 0 on fail
  */
 int buffer2file(FILE *fp, char *buffer, int length) {
-
     fwrite(buffer, length, 1, fp);
 
     if (ferror(fp)) {
@@ -79,7 +76,6 @@ int buffer2file(FILE *fp, char *buffer, int length) {
  * Save file from socket
  */
 void get_file(int sockfd, char *directory, char *filename, int file_size) {
-
     int read_size, n;
     int read_count = 0;
     char buffer[BUFFER_LEN];
