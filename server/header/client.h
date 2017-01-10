@@ -1,0 +1,4 @@
+#ifndef SK2_DROPBOX_CLIENT_H
+#define SK2_DROPBOX_CLIENT_H
+
+#endif // SK2_DROPBOX_CLIENT_H

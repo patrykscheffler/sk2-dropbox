@@ -1,7 +1,3 @@
-//
-// Created by jakub on 02.01.17.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,6 +16,11 @@ int init();
 void *client_loop(void *arg);
 
 int main(int argc, char *argv[]) {
+    // server_info_t info = {
+    //     .ip_addres = atoi(argv[1]),
+    //     .port = atoi(argv[2]),
+    // }
+
     int sockfd, clientSockFd;
     struct sockaddr_in cli_addr;
     socklen_t nTmp = sizeof(cli_addr);
