@@ -83,6 +83,7 @@ void *client_loop(void *arg) {
     /* Write a response to the client */
     printf("sending %s, %d, %d\n", fileInfo->name, fileInfo->size, sizeof(struct file_info));
     n = write(sck, fileInfo, sizeof(struct file_info));
+  
     Close(sck);
     pthread_exit(NULL);
 }
