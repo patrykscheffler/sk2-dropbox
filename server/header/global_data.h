@@ -12,7 +12,7 @@
 
 struct file_info {
     char name[MAX_FILE_NAME];
-    int size;
+    int32_t size;
 };
 
 struct socket_message {

@@ -71,14 +71,18 @@ void *client_loop(void *arg) {
     int sck = *((int *) arg);
     int n = 0;
 
+    struct file_info *fileInfo = (struct file_info*) malloc(sizeof(struct file_info));
+    strcpy(fileInfo->name, "test");
+    fileInfo->size = htonl(1231231231);
+
     /* If connection is established then start communicating */
     bzero(buffer, BUFFER_LEN);
     n = read(sck, buffer, BUFFER_LEN - 1);
-    printf("Here is the message: %s\n", buffer);
+    printf("Here is the message: %s", buffer);
 
     /* Write a response to the client */
-    n = write(sck, "I got your message\n", 20);
-
+    printf("sending %s, %d, %d\n", fileInfo->name, fileInfo->size, sizeof(struct file_info));
+    n = write(sck, fileInfo, sizeof(struct file_info));
     Close(sck);
     pthread_exit(NULL);
 }
