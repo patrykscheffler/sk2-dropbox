@@ -13,8 +13,6 @@
 
 int init();
 
-void *client_loop(void *arg);
-
 int main(int argc, char *argv[]) {
     // server_info_t info = {
     //     .ip_addres = atoi(argv[1]),
@@ -32,9 +30,6 @@ int main(int argc, char *argv[]) {
         clientSockFd = Accept(sockfd, (struct sockaddr *) &cli_addr, &nTmp);
 
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
-
-        pthread_t id;
-        pthread_create(&id, NULL, client_loop, &clientSockFd);
     }
 
     Close(sockfd);
@@ -64,21 +59,4 @@ int init() {
     Listen(sockfd, QUEUE_SIZE);
 
     return sockfd;
-}
-
-void *client_loop(void *arg) {
-    char buffer[BUFFER_LEN];
-    int sck = *((int *) arg);
-    int n = 0;
-
-    /* If connection is established then start communicating */
-    bzero(buffer, BUFFER_LEN);
-    n = read(sck, buffer, BUFFER_LEN - 1);
-    printf("Here is the message: %s\n", buffer);
-
-    /* Write a response to the client */
-    n = write(sck, "I got your message\n", 20);
-
-    Close(sck);
-    pthread_exit(NULL);
 }
