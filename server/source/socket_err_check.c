@@ -1,7 +1,3 @@
-//
-// Created by jakub on 03.01.17.
-//
-
 #include "../header/socket_err_check.h"
 
 int Socket(int domain, int type, int protocol) {
