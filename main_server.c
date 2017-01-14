@@ -14,16 +14,21 @@
 int init();
 
 int main(int argc, char *argv[]) {
-    // server_info_t info = {
-    //     .ip_addres = atoi(argv[1]),
-    //     .port = atoi(argv[2]),
-    // }
-
     int sockfd, clientSockFd;
     struct sockaddr_in cli_addr;
     socklen_t nTmp = sizeof(cli_addr);
 
-    sockfd = init();
+    server_info_t info = {
+        .version = 1,
+        .port = SERVER_PORT,
+    };
+
+    if (argc > 1) {
+        char* port_str = argv[1];
+        info.port = atoi(port_str);
+    }
+
+    sockfd = init(info.port);
 
     while (1) {
         /* Accept actual connection from the client */
@@ -36,7 +41,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-int init() {
+int init(int32_t port) {
     int sockfd;
     struct sockaddr_in serv_addr;
 
@@ -48,7 +53,7 @@ int init() {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(SERVER_PORT);
+    serv_addr.sin_port = htons(port);
 
     /* Now bind the host address using bind() call.*/
     Bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));

@@ -3,7 +3,7 @@
 
 #define SERVER_PORT 1234
 #define QUEUE_SIZE 5
-#define MESSAGE_LEN 256
+#define BUFFER_LEN 256
 #define MAX_FILE_NAME 64
 #define MAX_USER_NAME 64
 
@@ -25,8 +25,8 @@ typedef struct socket_message {
 } socket_message_t;
 
 typedef struct server_info {
-    int ip_address;
-    int port;
+    int32_t version;
+    int32_t port;
 } server_info_t;
 
 #endif // SK2_DROPBOX_GLOBAL_DATA_H

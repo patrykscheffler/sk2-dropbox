@@ -17,14 +17,14 @@ int create_client_thread(int socket) {
 void *client_loop(void *arg) {
     int socket = *((int*) arg);
     int n = 0;
-    char message[MESSAGE_LEN];
-    bzero(message, MESSAGE_LEN);
+    char message[BUFFER_LEN];
+    bzero(message, BUFFER_LEN);
 
     struct file_info *fileInfo = (struct file_info*) malloc(sizeof(struct file_info));
     strcpy(fileInfo->name, "test");
     fileInfo->size = htonl(1231231231);
 
-    read(socket, message, MESSAGE_LEN - 1);
+    read(socket, message, BUFFER_LEN - 1);
     printf("sending %s, %d, %d\n", fileInfo->name, fileInfo->size, sizeof(struct file_info));
     n = write(sck, fileInfo, sizeof(struct file_info));
 
