@@ -1,5 +1,6 @@
 package app;
 
+import app.socket.Client;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +18,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Client client = new Client("localhost", 1234);
+        client.loop();
+//        launch(args);
     }
 
 }

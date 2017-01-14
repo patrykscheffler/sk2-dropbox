@@ -6,6 +6,8 @@ int Socket(int domain, int type, int protocol) {
         perror("ERROR opening socket");
         exit(1);
     }
+    int i = 1;
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&i, sizeof(i));
     return sockfd;
 }
 
