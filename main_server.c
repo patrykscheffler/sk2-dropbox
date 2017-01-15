@@ -24,8 +24,6 @@ int main(int argc, char *argv[]) {
         .port = SERVER_PORT,
     };
 
-    client_list_files(5);
-
     if (argc > 1) {
         char* port_str = argv[1];
         info.port = atoi(port_str);

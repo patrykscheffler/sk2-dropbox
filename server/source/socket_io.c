@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
 #include "../header/global_data.h"
@@ -8,7 +11,7 @@
 char *preapare_path(char *directory, char *filename) {
     char *fullpath = (char *) malloc(BUFFER_LEN);
 
-    strncpy(fullpath, "files/", 7);
+    strncpy(fullpath, "./files/", 8);
     strncat(fullpath, directory, BUFFER_LEN - 7);
     strncat(fullpath, "/", BUFFER_LEN - strlen(fullpath));
     strncat(fullpath, filename, BUFFER_LEN - strlen(fullpath));
@@ -98,4 +101,29 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
     }
 
     close_file(fp);
+}
+
+/*
+ * Write file list in 'directory' to socket 'socketfd'
+ */
+void send_file_list(int sockfd, char *directory) {
+    char *fullpath = preapare_path(directory, "");
+    struct dirent *ep;
+    DIR *dp;
+
+    dp = opendir(fullpath);
+
+    if (dp != NULL) {
+        while ((ep = readdir (dp)))
+        puts (ep->d_name);
+
+        // TODO: filter data (cross-platform), save to struct
+
+        (void) closedir (dp);
+    } else {
+        perror ("Couldn't open the directory");
+    }
+
+    // TODO: send file list
+    // write(sockfd, &buffer, i);
 }
