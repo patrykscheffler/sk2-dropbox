@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
@@ -54,15 +56,36 @@ void* client_loop(void *arg) {
 }
 
 void client_file_read(int socket) {
-
+    // TODO: receive file info
+    // TODO: send file | send FAILURE message
 }
 
 void client_file_write(int socket) {
-
+    // TODO: receive file info
+    // TODO: receive file
+    // TODO: save file
+    // TODO: save file
 }
 
 void client_list_files(int socket) {
+    // TODO: read user name
+    DIR *dp;
+    struct dirent *ep;
+    dp = opendir ("./");
 
+    if (dp != NULL) {
+        while ((ep = readdir (dp)))
+        puts (ep->d_name);
+
+        // TODO: filter data (cross-platform), save to structure
+
+        (void) closedir (dp);
+    } else {
+        perror ("Couldn't open the directory");
+    }
+
+    // TODO: send structre size
+    // TODO: send file list
 }
 
 int valid_file_request(char *request) {
