@@ -14,20 +14,19 @@ typedef struct client_connection_info {
 } client_conn_info_t;
 
 typedef struct file_info {
-    char name[MAX_FILE_NAME];
     char user[MAX_USER_NAME];
-    char *data;
-    int size;
+    char name[MAX_FILE_NAME];
+    int32_t size;
 } file_info_t;
 
 typedef struct socket_message {
-    int message_length;
+    int32_t message_length;
     char *message;
 } socket_message_t;
 
 typedef struct server_info {
-    int ip_address;
-    int port;
+    int32_t version;
+    int32_t port;
 } server_info_t;
 
 #endif // SK2_DROPBOX_GLOBAL_DATA_H

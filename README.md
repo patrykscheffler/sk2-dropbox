@@ -12,5 +12,5 @@ make
 
 Żeby uruchomić:
 ```
-./sk2_dropbox
+./sk2_dropbox [port]
 ```

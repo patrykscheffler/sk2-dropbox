@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class Client {
-
     String hostName;
     int port;
 
@@ -20,7 +19,7 @@ public class Client {
         this.port = port;
     }
 
-    public void openConnection(){
+    public void openConnection() {
         try {
             this.socket = new Socket(this.hostName, this.port);
             this.toServer = this.socket.getOutputStream();
@@ -31,7 +30,7 @@ public class Client {
 
     }
 
-    public void closeConnection(){
+    public void closeConnection() {
         try {
             this.socket.close();
         } catch (IOException e) {
@@ -39,8 +38,8 @@ public class Client {
         }
     }
 
-    public void loop(){
-        try{
+    public void loop() {
+        try {
             this.openConnection();
 
             BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(this.toServer));
