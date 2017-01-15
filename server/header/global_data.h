@@ -14,8 +14,8 @@ typedef struct client_connection_info {
 } client_conn_info_t;
 
 typedef struct file_info {
-    char name[MAX_FILE_NAME];
     char user[MAX_USER_NAME];
+    char name[MAX_FILE_NAME];
     int32_t size;
 } file_info_t;
 

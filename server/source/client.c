@@ -8,25 +8,30 @@
 #include "../header/global_data.h"
 #include "../header/client.h"
 
-int create_client_thread(int socket) {
+void create_client_thread(int socket) {
     pthread_t client_thread;
 
-    return pthread_create(&client_thread, NULL, client_loop, &socket);
+    if (pthread_create(&client_thread, NULL, client_loop, &socket)) {
+        fprintf(stderr, "Error creating client thread");
+        exit(1);
+    }
 }
 
 void *client_loop(void *arg) {
     int socket = *((int*) arg);
-    int n = 0;
     char message[BUFFER_LEN];
-    bzero(message, BUFFER_LEN);
 
-    struct file_info *fileInfo = (struct file_info*) malloc(sizeof(struct file_info));
-    strcpy(fileInfo->name, "test");
-    fileInfo->size = htonl(1231231231);
+    file_info_t fileInfo = {
+        .user = "mike",
+        .name = "test.txt",
+        .size = 1231231231
+    };
 
-    read(socket, message, BUFFER_LEN - 1);
-    printf("sending %s, %d, %d\n", fileInfo->name, fileInfo->size, sizeof(struct file_info));
-    n = write(sck, fileInfo, sizeof(struct file_info));
+    read(socket, message, BUFFER_LEN);
+    printf("Received message: %s\n", message);
+
+    printf("Sending %s/%s, %d, %lu\n", fileInfo.user, fileInfo.name, fileInfo.size, sizeof(fileInfo));
+    write(socket, &fileInfo, sizeof(fileInfo));
 
     Close(socket);
     pthread_exit(NULL);

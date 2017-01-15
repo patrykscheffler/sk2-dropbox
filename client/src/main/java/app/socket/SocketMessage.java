@@ -4,10 +4,12 @@ import java.io.*;
 
 public class SocketMessage {
     public static int nameBits = 64;
+    private String user;
     private String name;
     private int size;
 
-    public SocketMessage(String name, int size) {
+    public SocketMessage(String user, String name, int size) {
+        this.user = user;
         this.name = name;
         this.size = size;
     }
@@ -15,15 +17,18 @@ public class SocketMessage {
     public static SocketMessage readFromBuffer(InputStream inputStream) throws IOException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-        byte[] input = new byte[nameBits];
-        dataInputStream.read(input, 0, nameBits);
+        byte[] user = new byte[nameBits];
+        dataInputStream.read(user, 0, nameBits);
+        byte[] name = new byte[nameBits];
+        dataInputStream.read(name, 0, nameBits);
         int size = dataInputStream.readInt();
 
-        return new SocketMessage(new String(input), size);
+        return new SocketMessage(new String(user), new String(name), size);
     }
 
     public void writeToBuffer(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        dataOutputStream.write(this.user.getBytes());
         dataOutputStream.write(this.name.getBytes());
         dataOutputStream.writeInt(this.size);
     }
@@ -42,5 +47,13 @@ public class SocketMessage {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }
