@@ -16,10 +16,9 @@ const char LIST_FILES = 0xF3;
 
 const char FAILURE = 0xFF;
 
-void create_client_thread(int socket) {
+void create_client_thread(int *socket) {
     pthread_t client_thread;
-
-    if (pthread_create(&client_thread, NULL, client_loop, &socket)) {
+    if (pthread_create(&client_thread, NULL, client_loop, socket)) {
         fprintf(stderr, "Error creating client thread");
         exit(1);
     }

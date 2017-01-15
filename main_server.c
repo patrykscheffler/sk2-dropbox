@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
 
-        create_client_thread(clientSockFd);
+        create_client_thread(&clientSockFd);
     }
 
     Close(sockfd);
