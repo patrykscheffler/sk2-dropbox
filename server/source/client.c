@@ -31,7 +31,7 @@ void* client_loop(void *arg) {
     file_info_t fileInfo = {
         .user = "mike",
         .name = "test.txt",
-        .size = 1231231231
+        .size = htonl(1231231231)
     };
 
     read(socket, message, BUFFER_LEN);
