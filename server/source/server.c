@@ -8,10 +8,10 @@
 #include "../header/client.h"
 #include "../header/server.h"
 
-void create_server_thread(int socket) {
+void create_server_thread(int *socket) {
     pthread_t server_thread;
 
-    if (pthread_create(&server_thread, NULL, server_loop, &socket)) {
+    if (pthread_create(&server_thread, NULL, server_loop, socket)) {
         fprintf(stderr, "Error creating server thread");
         exit(1);
     }
