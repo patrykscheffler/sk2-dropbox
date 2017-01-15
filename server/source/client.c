@@ -8,6 +8,8 @@
 #include "../header/global_data.h"
 #include "../header/client.h"
 
+static pthread_mutex_t lock;
+
 const char FILE_READ = 0xF1;
 const char FILE_WRITE = 0xF2;
 const char LIST_FILES = 0xF3;
@@ -68,7 +70,10 @@ void client_file_write(int socket) {
     read(socket, &fileInfo, sizeof(fileInfo));
 
     get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+
+    pthread_mutex_init(&lock, NULL);
     // TODO: update server version, replicate file
+    pthread_mutex_destroy(&lock);
 }
 
 void client_list_files(int socket) {
