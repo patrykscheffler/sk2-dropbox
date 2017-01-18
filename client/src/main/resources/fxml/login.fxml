@@ -32,7 +32,7 @@
       </GridPane>
       <ButtonBar layoutX="218.0" layoutY="205.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="222.0">
          <buttons>
-            <Button fx:id="submitButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="171.0" text="Connect" />
+            <Button fx:id="submitButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmitButton" prefHeight="40.0" prefWidth="171.0" text="Connect" />
          </buttons>
       </ButtonBar>
    </children>

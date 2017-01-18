@@ -29,9 +29,11 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
 
         personData.add(new FileInfo("test", "test", 2));
+        personData.add(new FileInfo("test2", "test", 3));
+        personData.add(new FileInfo("test3", "test", 4));
 
         initLoginLayout();
-        initHomeLayout();
+//        initHomeLayout();
     }
 
     public void initLoginLayout() throws IOException {
@@ -41,6 +43,7 @@ public class Main extends Application {
 
         Login loginController = loader.getController();
         loginController.setMainApp(this);
+        loginController.setStage(primaryStage);
 
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.setResizable(false);

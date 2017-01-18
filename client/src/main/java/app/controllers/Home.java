@@ -34,6 +34,26 @@ public class Home {
     @FXML
     private void initialize() {
         filenameColumn.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
+
+        showFileDetails(null);
+        fileTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showFileDetails(newValue)
+        );
+    }
+
+    @FXML
+    private void handleUploadButton() {
+        System.out.println("upload");
+    }
+
+    @FXML
+    private void handleDownloadButton() {
+        System.out.println("download");
+    }
+
+    @FXML
+    private void handleDeleteButton() {
+        System.out.println("delete");
     }
 
     public void setMainApp(Main mainApp) {
@@ -42,4 +62,13 @@ public class Home {
         fileTable.setItems(mainApp.getPersonData());
     }
 
+    private void showFileDetails(FileInfo file) {
+        if (file != null) {
+            nameLabel.setText(file.getFilename());
+            sizeLabel.setText(Integer.toString(file.getSize()));
+        } else {
+            nameLabel.setText("");
+            sizeLabel.setText("");
+        }
+    }
 }
