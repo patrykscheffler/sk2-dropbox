@@ -3,6 +3,7 @@ package app;
 import app.controllers.Home;
 import app.controllers.Login;
 import app.model.FileInfo;
+import app.socket.Client;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private ObservableList<FileInfo> personData = FXCollections.observableArrayList();
+    private Client client;
 
     public static void main(String[] args) {
 //        Client client = new Client("localhost", 1234);
@@ -33,7 +35,6 @@ public class Main extends Application {
         personData.add(new FileInfo("test3", "test", 4));
 
         initLoginLayout();
-//        initHomeLayout();
     }
 
     public void initLoginLayout() throws IOException {
@@ -66,5 +67,21 @@ public class Main extends Application {
 
     public ObservableList<FileInfo> getPersonData() {
         return personData;
+    }
+
+    public void setPersonData(ObservableList<FileInfo> personData) {
+        this.personData = personData;
+    }
+
+    public void addPersonData(FileInfo file){
+        this.personData.add(file);
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

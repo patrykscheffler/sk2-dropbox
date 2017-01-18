@@ -25,9 +25,9 @@
             <Label text="Host IP" />
             <Label text="Port" GridPane.rowIndex="1" />
             <Label text="Username" GridPane.rowIndex="2" />
-            <TextField fx:id="hostIp" GridPane.columnIndex="1" />
-            <TextField fx:id="port" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="hostIp" text="localhost" GridPane.columnIndex="1" />
+            <TextField fx:id="port" text="1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="username" text="user" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <ButtonBar layoutX="218.0" layoutY="205.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="222.0">

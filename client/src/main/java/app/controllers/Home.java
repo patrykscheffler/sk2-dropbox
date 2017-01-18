@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.Main;
+import app.model.FileController;
 import app.model.FileInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,7 +29,10 @@ public class Home {
 
     private Main mainApp;
 
+    private FileController fileController;
+
     public Home() {
+        fileController = new FileController();
     }
 
     @FXML
@@ -43,17 +47,27 @@ public class Home {
 
     @FXML
     private void handleUploadButton() {
-        System.out.println("upload");
+        FileInfo fileInfo = fileController.upload();
+        if (fileInfo != null)
+            mainApp.addPersonData(fileInfo);
     }
 
     @FXML
     private void handleDownloadButton() {
-        System.out.println("download");
+        FileInfo fileInfo = fileTable.getSelectionModel().getSelectedItem();
+        if (fileInfo == null)
+            return;
+
+        fileController.download(fileInfo);
     }
 
     @FXML
     private void handleDeleteButton() {
-        System.out.println("delete");
+        FileInfo fileInfo = fileTable.getSelectionModel().getSelectedItem();
+        if (fileInfo == null)
+            return;
+
+        fileController.remove(fileInfo);
     }
 
     public void setMainApp(Main mainApp) {
