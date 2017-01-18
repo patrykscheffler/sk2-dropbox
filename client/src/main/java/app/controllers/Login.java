@@ -50,7 +50,7 @@ public class Login {
             return;
         }catch (Exception e){
             System.out.println(e);
-            
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(stage);
             alert.setHeaderText("Unable to create connection");
@@ -87,7 +87,7 @@ public class Login {
     }
 
     private boolean validateField(TextField field){
-        return (field.getText() == null || field.getText().length() == 0) ? false : true;
+        return !(field.getText() == null || field.getText().length() == 0);
     }
 
     public void setMainApp(Main mainApp) {

@@ -21,19 +21,12 @@ public class Main extends Application {
     private Client client;
 
     public static void main(String[] args) {
-//        Client client = new Client("localhost", 1234);
-//        client.loop();
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-
-        personData.add(new FileInfo("test", "test", 2));
-        personData.add(new FileInfo("test2", "test", 3));
-        personData.add(new FileInfo("test3", "test", 4));
-
         initLoginLayout();
     }
 
@@ -58,6 +51,7 @@ public class Main extends Application {
 
         Home homeController = loader.getController();
         homeController.setMainApp(this);
+        homeController.getServerFileList();
 
         primaryStage.setScene(new Scene(root, 1000, 550));
         primaryStage.setResizable(false);
@@ -67,10 +61,6 @@ public class Main extends Application {
 
     public ObservableList<FileInfo> getPersonData() {
         return personData;
-    }
-
-    public void setPersonData(ObservableList<FileInfo> personData) {
-        this.personData = personData;
     }
 
     public void addPersonData(FileInfo file){

@@ -72,8 +72,12 @@ public class Home {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
         fileTable.setItems(mainApp.getPersonData());
+        fileController.setClient(mainApp.getClient());
+    }
+
+    public void getServerFileList() {
+        fileController.listServerFiles().stream().forEach(e -> mainApp.addPersonData(e));
     }
 
     private void showFileDetails(FileInfo file) {
