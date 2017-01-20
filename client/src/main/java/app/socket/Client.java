@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class Client {
     String hostName;
+    String userName;
     int port;
 
     Socket socket;
@@ -14,20 +15,18 @@ public class Client {
     InputStream fromServer;
 
 
-    public Client(String hostName, int port) {
+    public Client(String hostName, String userName, int port) throws IOException {
         this.hostName = hostName;
+        this.userName = userName;
         this.port = port;
+        openConnection();
+        closeConnection();
     }
 
-    public void openConnection() {
-        try {
+    public void openConnection() throws IOException {
             this.socket = new Socket(this.hostName, this.port);
             this.toServer = this.socket.getOutputStream();
             this.fromServer = this.socket.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void closeConnection() {
