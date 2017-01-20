@@ -8,6 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Home {
     @FXML
@@ -28,12 +32,11 @@ public class Home {
     private Button deleteButton;
 
     private Main mainApp;
+    private Stage stage;
 
-    private FileController fileController;
+    private FileController fileController = new FileController();
 
-    public Home() {
-        fileController = new FileController();
-    }
+    private FileChooser fileChooser = new FileChooser();
 
     @FXML
     private void initialize() {
@@ -47,9 +50,13 @@ public class Home {
 
     @FXML
     private void handleUploadButton() {
-        FileInfo fileInfo = fileController.upload();
+        File file = fileChooser.showOpenDialog(stage);
+        if (file == null)
+            return;
+
+        FileInfo fileInfo = fileController.upload(file);
         if (fileInfo != null)
-            mainApp.addPersonData(fileInfo);
+            mainApp.addFileData(fileInfo);
     }
 
     @FXML
@@ -58,7 +65,11 @@ public class Home {
         if (fileInfo == null)
             return;
 
-        fileController.download(fileInfo);
+        File file = fileChooser.showSaveDialog(stage);
+        if (file == null)
+            return;
+
+        fileController.download(fileInfo, file);
     }
 
     @FXML
@@ -72,21 +83,26 @@ public class Home {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        fileTable.setItems(mainApp.getPersonData());
+        fileTable.setItems(mainApp.getFileData());
         fileController.setClient(mainApp.getClient());
     }
 
     public void getServerFileList() {
-        fileController.listServerFiles().stream().forEach(e -> mainApp.addPersonData(e));
+        mainApp.clearFileData();
+        fileController.listServerFiles().stream().forEach(e -> mainApp.addFileData(e));
     }
 
     private void showFileDetails(FileInfo file) {
         if (file != null) {
             nameLabel.setText(file.getFilename());
-            sizeLabel.setText(Integer.toString(file.getSize()));
+            sizeLabel.setText(Long.toString(file.getSize()));
         } else {
             nameLabel.setText("");
             sizeLabel.setText("");
         }
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

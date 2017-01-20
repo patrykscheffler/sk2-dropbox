@@ -27,9 +27,6 @@ public class Login {
 
     private Main mainApp;
 
-    public Login() {
-    }
-
     @FXML
     private void initialize() {
     }

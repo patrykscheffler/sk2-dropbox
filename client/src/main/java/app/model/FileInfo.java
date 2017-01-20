@@ -1,19 +1,16 @@
 package app.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class FileInfo {
     private final StringProperty filename;
     private final StringProperty user;
-    private final IntegerProperty size;
+    private final LongProperty size;
 
-    public FileInfo(String filename, String user, int size) {
+    public FileInfo(String filename, String user, long size) {
         this.filename = new SimpleStringProperty(filename);
         this.user = new SimpleStringProperty(user);
-        this.size = new SimpleIntegerProperty(size);
+        this.size = new SimpleLongProperty(size);
     }
 
     public String getFilename() {
@@ -40,11 +37,11 @@ public class FileInfo {
         this.user.set(user);
     }
 
-    public int getSize() {
+    public long getSize() {
         return size.get();
     }
 
-    public IntegerProperty sizeProperty() {
+    public LongProperty sizeProperty() {
         return size;
     }
 

@@ -1,5 +1,7 @@
 package app.socket;
 
+import app.model.FileInfo;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -37,6 +39,18 @@ public class Client {
         }
     }
 
+    public void uploadFile(File file){
+//        TODO
+    }
+
+    public void downloadFile(FileInfo fileInfo, File file){
+//        TODO
+    }
+
+    public void removeFile(FileInfo fileInfo){
+//        TODO
+    }
+
     public void loop() {
         try {
             this.openConnection();
@@ -53,5 +67,9 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }
