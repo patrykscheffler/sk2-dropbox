@@ -54,4 +54,8 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    public String getUserName() {
+        return userName;
+    }
 }

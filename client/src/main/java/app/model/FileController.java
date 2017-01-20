@@ -2,6 +2,7 @@ package app.model;
 
 import app.socket.Client;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +10,14 @@ public class FileController {
 
     Client client;
 
-    public FileInfo upload() {
-        System.out.println("uploading");
+    public FileInfo upload(File file) {
+        System.out.println("uploading " + file.getName() + " " + file.length());
 
-        return new FileInfo("testUpload", "testUser", 123);
+        return new FileInfo(file.getName(), client.getUserName(), file.length());
     }
 
-    public void download(FileInfo file) {
-        System.out.println("downloading " + file.getFilename());
+    public void download(FileInfo fileInfo, File file) {
+        System.out.println("downloading " + fileInfo.getFilename());
     }
 
     public void remove(FileInfo file) {

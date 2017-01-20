@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private Stage primaryStage;
-    private ObservableList<FileInfo> personData = FXCollections.observableArrayList();
+    private ObservableList<FileInfo> fileData = FXCollections.observableArrayList();
     private Client client;
 
     public static void main(String[] args) {
@@ -51,6 +51,7 @@ public class Main extends Application {
 
         Home homeController = loader.getController();
         homeController.setMainApp(this);
+        homeController.setStage(primaryStage);
         homeController.getServerFileList();
 
         primaryStage.setScene(new Scene(root, 1000, 550));
@@ -59,12 +60,12 @@ public class Main extends Application {
 
     }
 
-    public ObservableList<FileInfo> getPersonData() {
-        return personData;
+    public ObservableList<FileInfo> getFileData() {
+        return fileData;
     }
 
-    public void addPersonData(FileInfo file){
-        this.personData.add(file);
+    public void addFileData(FileInfo file){
+        this.fileData.add(file);
     }
 
     public Client getClient() {
