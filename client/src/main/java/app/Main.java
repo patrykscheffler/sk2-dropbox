@@ -68,6 +68,10 @@ public class Main extends Application {
         this.fileData.add(file);
     }
 
+    public void clearFileData(){
+        this.fileData.clear();
+    }
+
     public Client getClient() {
         return client;
     }

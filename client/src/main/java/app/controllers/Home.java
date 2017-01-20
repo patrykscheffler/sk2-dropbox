@@ -88,6 +88,7 @@ public class Home {
     }
 
     public void getServerFileList() {
+        mainApp.clearFileData();
         fileController.listServerFiles().stream().forEach(e -> mainApp.addFileData(e));
     }
 

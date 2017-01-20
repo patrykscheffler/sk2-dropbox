@@ -1,5 +1,7 @@
 package app.socket;
 
+import app.model.FileInfo;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -35,6 +37,18 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void uploadFile(File file){
+//        TODO
+    }
+
+    public void downloadFile(FileInfo fileInfo, File file){
+//        TODO
+    }
+
+    public void removeFile(FileInfo fileInfo){
+//        TODO
     }
 
     public void loop() {
