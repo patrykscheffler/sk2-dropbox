@@ -28,6 +28,7 @@ void* server_loop(void *arg) {
     };
 
     read(socket, &message, sizeof(uint16_t));
+    message = ntohs(message);
     printf("Received message: %d\n", message);
 
     switch(message) {

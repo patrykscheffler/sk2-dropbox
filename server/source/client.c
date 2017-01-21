@@ -22,7 +22,8 @@ void* client_loop(void *arg) {
     uint16_t message;
 
     read(socket, &message, sizeof(uint16_t));
-    printf("Received message: %d\n", ntohs(message));
+    message = ntohs(message);
+    printf("Received message: %d\n", message);
 
     switch(message) {
         case FILE_READ:
@@ -64,7 +65,7 @@ void client_list_files(int socket) {
 void replicate_file(file_info_t fileInfo) {
     FILE *fp = open_file("./server_list.txt", "r");
     struct sockaddr_in sck_addr;
-    uint16_t message = SERVER_CONN;
+    uint16_t message = htons(SERVER_CONN);
     int socket, port;
 
     while(fscanf(fp, "%d", &port) != EOF) {

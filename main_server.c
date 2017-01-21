@@ -41,7 +41,8 @@ int main(int argc, char *argv[]) {
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
 
         read(clientSockFd, &message, sizeof(uint16_t));
-        printf("Received message: %d\n", ntohs(message));
+        message = ntohs(message);
+        printf("Received message: %d\n", message);
 
         switch(message) {
             case CLIENT_CONN:
