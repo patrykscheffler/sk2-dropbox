@@ -21,12 +21,12 @@ int main(int argc, char *argv[]) {
     uint16_t message;
 
     server_info_t info = {
-        .version = 1,
-        .port = SERVER_PORT,
+            .version = 1,
+            .port = SERVER_PORT,
     };
 
     if (argc > 1) {
-        char* port_str = argv[1];
+        char *port_str = argv[1];
         info.port = atoi(port_str);
     }
 
@@ -44,15 +44,13 @@ int main(int argc, char *argv[]) {
         message = ntohs(message);
         printf("Received message: %d\n", message);
 
-        switch(message) {
-            case CLIENT_CONN:
-                create_client_thread(&clientSockFd);
-                break;
-            case SERVER_CONN:
-                create_server_thread(&clientSockFd);
-                break;
-        }
+
+        if (message == CLIENT_CONN)
+            create_client_thread(&clientSockFd);
+        if (message == SERVER_CONN)
+            create_server_thread(&clientSockFd);
     }
+
 
     Close(sockfd);
     return 0;

@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <stdint.h>
+#include <netinet/in.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
