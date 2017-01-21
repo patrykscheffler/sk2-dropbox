@@ -58,10 +58,10 @@ void client_file_write(int socket) {
 }
 
 void client_list_files(int socket) {
-    char user[MAX_USER_NAME];
-    read(socket, user, MAX_USER_NAME);
+    file_info_t fileInfo;
+    read(socket, &fileInfo, sizeof(fileInfo));
 
-    send_file_list(socket, user);
+    send_file_list(socket, fileInfo.user);
 }
 
 int valid_file_request(char *request) {

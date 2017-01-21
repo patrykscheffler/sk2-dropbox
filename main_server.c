@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <netdb.h>
-
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
-
 #include <arpa/inet.h>
+
 #include "server/header/socket_err_check.h"
 #include "server/header/global_data.h"
+#include "server/header/socket_io.h"
 #include "server/header/client.h"
 #include "server/header/server.h"
 
