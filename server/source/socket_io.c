@@ -64,10 +64,7 @@ void close_file(FILE *fp) {
 
 int does_file_exist(char *fullpath) {
     struct stat st;
-    int result = stat(fullpath, &st);
-    if (result < 0)
-        return 1;
-    return 0;
+    return stat(fullpath, &st);
 }
 
 /*
