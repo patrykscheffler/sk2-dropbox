@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
@@ -35,29 +36,45 @@ void close_file(FILE *fp) {
     }
 }
 
+int does_file_exist(char *fullpath) {
+    struct stat st;
+    int result = stat(fullpath, &st);
+
+    return result == 0;
+}
+
 /*
  * Write file with name 'filename' in 'directory' to socket 'socketfd'
  */
 void send_file(int sockfd, char *directory, char *filename) {
     char buffer[BUFFER_LEN];
     int bufsize = BUFFER_LEN;
+    uint16_t message;
     int i;
 
     char *fullpath = preapare_path(directory, filename);
 
-    FILE *fp = open_file(fullpath, "r");
+    if (does_file_exist(fullpath)) {
+        message = FAILURE;
+        write(sockfd, &message, sizeof(uint16_t));
+    } else {
+        message = ACCEPT;
+        write(sockfd, &message, sizeof(uint16_t));
 
-    while ((i = fread(buffer, 1, bufsize, fp))) {
-        if (ferror(fp)) {
-            fprintf(stderr, "A read error occured.\n");
-            Close(sockfd);
-            exit(1);
+        FILE *fp = open_file(fullpath, "r");
+
+        while ((i = fread(buffer, 1, bufsize, fp))) {
+            if (ferror(fp)) {
+                fprintf(stderr, "A read error occured.\n");
+                Close(sockfd);
+                exit(1);
+            }
+
+            write(sockfd, &buffer, i);
         }
 
-        write(sockfd, &buffer, i);
+        close_file(fp);
     }
-
-    close_file(fp);
 }
 
 /*
@@ -108,22 +125,39 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
  */
 void send_file_list(int sockfd, char *directory) {
     char *fullpath = preapare_path(directory, "");
+    file_info_t fileInfo;
     struct dirent *ep;
+    struct stat st;
+    int size;
     DIR *dp;
 
     dp = opendir(fullpath);
 
-    if (dp != NULL) {
-        while ((ep = readdir (dp)))
-        puts (ep->d_name);
-
-        // TODO: filter data (cross-platform), save to struct
-
-        (void) closedir (dp);
-    } else {
+    if (dp == NULL) {
         perror ("Couldn't open the directory");
+        exit(1);
     }
 
-    // TODO: send file list
-    // write(sockfd, &buffer, i);
+    while ((ep = readdir(dp))) {
+        if (ep->d_name[0] != '.') {
+            fullpath = preapare_path(directory, ep->d_name);
+            stat(fullpath, &st);
+            size = st.st_size;
+
+            strcpy(fileInfo.name, ep->d_name);
+            strcpy(fileInfo.user, directory);
+            fileInfo.size = htons(size);
+
+            write(sockfd, &fileInfo, sizeof(fileInfo));
+        }
+    }
+
+    closedir (dp);
+
+    strcpy(fileInfo.name, "");
+    strcpy(fileInfo.user, "");
+    fileInfo.size = htons(0);
+
+    // end list / no files
+    write(sockfd, &fileInfo, sizeof(fileInfo));
 }

@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <netdb.h>
-
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
-
 #include <arpa/inet.h>
+
 #include "server/header/socket_err_check.h"
 #include "server/header/global_data.h"
+#include "server/header/socket_io.h"
 #include "server/header/client.h"
+#include "server/header/server.h"
 
 int init();
 
@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     int sockfd, clientSockFd;
     struct sockaddr_in cli_addr;
     socklen_t nTmp = sizeof(cli_addr);
+    uint16_t message;
 
     server_info_t info = {
         .version = 1,
@@ -31,12 +32,23 @@ int main(int argc, char *argv[]) {
 
     sockfd = init(info.port);
 
+    printf("Server running on port %d\n", info.port);
+
     while (1) {
         clientSockFd = Accept(sockfd, (struct sockaddr *) &cli_addr, &nTmp);
-
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
 
-        create_client_thread(&clientSockFd);
+        read(clientSockFd, &message, sizeof(uint16_t));
+        printf("Received message: %d\n", ntohs(message));
+
+        switch(message) {
+            case CLIENT_CONN:
+                create_client_thread(&clientSockFd);
+                break;
+            case SERVER_CONN:
+                create_server_thread(&clientSockFd);
+                break;
+        }
     }
 
     Close(sockfd);
