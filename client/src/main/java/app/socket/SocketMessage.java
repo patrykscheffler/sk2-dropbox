@@ -25,12 +25,27 @@ public class SocketMessage {
     }
 
     public void writeToBuffer(DataOutputStream dataOutputStream) throws IOException {
-        this.user = String.format("%0$-" + nameBits + "s", this.user).substring(0,nameBits-1) + '\0';
-        this.name = String.format("%0$-" + nameBits + "s", this.name).substring(0,nameBits-1) + '\0';
+//        this.user = String.format("%0$-" + nameBits + "s", this.user).substring(0,nameBits-1) + '\0';
+//        this.name = String.format("%0$-" + nameBits + "s", this.name).substring(0,nameBits-1) + '\0';
+
+        this.user = formatStringToLength(this.user, this.nameBits);
+        this.name = formatStringToLength(this.name, this.nameBits);
 
         dataOutputStream.write(this.user.getBytes());
         dataOutputStream.write(this.name.getBytes());
         dataOutputStream.writeInt(this.size);
+    }
+
+    private String formatStringToLength(String toFormat, int length){
+        String ret;
+        if(toFormat.length() < length){
+            StringBuilder stringBuilder = new StringBuilder(String.format("%0$-" + length + "s", toFormat));
+            stringBuilder.setCharAt(toFormat.length(), '\0');
+            ret = stringBuilder.toString();
+        }else{
+            ret = String.format("%0$-" + length + "s", toFormat).substring(0,length-1) + '\0';
+        }
+        return ret;
     }
 
     public String getName() {
