@@ -61,10 +61,10 @@ void send_file(int sockfd, char *directory, char *filename) {
     char *fullpath = preapare_path(directory, filename);
 
     if (does_file_exist(fullpath)) {
-        message = FAILURE;
+        message = htons(FAILURE);
         write(sockfd, &message, sizeof(uint16_t));
     } else {
-        message = ACCEPT;
+        message = htons(ACCEPT);
         write(sockfd, &message, sizeof(uint16_t));
 
         FILE *fp = open_file(fullpath, "r");

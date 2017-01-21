@@ -8,13 +8,13 @@
 #define MAX_USER_NAME 64
 #define DEBUG 1
 
-static const uint16_t CLIENT_CONN = htons(0x01);
-static const uint16_t SERVER_CONN = htons(0x02);
-static const uint16_t FILE_READ = htons(0xF1);
-static const uint16_t FILE_WRITE = htons(0xF2);
-static const uint16_t LIST_FILES = htons(0xF3);
-static const uint16_t ACCEPT = htons(0x00);
-static const uint16_t FAILURE = htons(0xFF);
+static const uint16_t CLIENT_CONN = 0x01;
+static const uint16_t SERVER_CONN = 0x02;
+static const uint16_t FILE_READ = 0xF1;
+static const uint16_t FILE_WRITE = 0xF2;
+static const uint16_t LIST_FILES = 0xF3;
+static const uint16_t ACCEPT = 0x00;
+static const uint16_t FAILURE = 0xFF;
 
 typedef struct client_connection_info {
     int socket;
