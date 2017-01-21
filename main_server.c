@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
         clientSockFd = Accept(sockfd, (struct sockaddr *) &cli_addr, &nTmp);
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
 
-        read(clientSockFd, &message, 1);
+        read(clientSockFd, &message, sizeof(uint16_t));
         printf("Received message: %d\n", ntohs(message));
 
         switch(message) {

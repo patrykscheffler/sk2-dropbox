@@ -27,7 +27,7 @@ void* server_loop(void *arg) {
         .port = 1234
     };
 
-    read(socket, &message, 1);
+    read(socket, &message, sizeof(uint16_t));
     printf("Received message: %d\n", message);
 
     switch(message) {

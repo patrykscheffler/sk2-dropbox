@@ -22,7 +22,7 @@ void* client_loop(void *arg) {
     int socket = *((int*) arg);
     uint16_t message;
 
-    read(socket, &message, 1);
+    read(socket, &message, sizeof(uint16_t));
     printf("Received message: %d\n", ntohs(message));
 
     switch(message) {
