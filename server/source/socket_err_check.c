@@ -34,6 +34,13 @@ int Accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen) {
     return n;
 }
 
+void Connect(int sockfd, struct sockaddr *srvaddr, socklen_t addrlen) {
+    if (connect(sockfd, srvaddr, addrlen) < 0) {
+        perror ("Brak połączenia");
+		exit (EXIT_FAILURE);
+    }
+}
+
 void Close(int sockfd) {
     if (close(sockfd) == -1) {
         perror("close error");

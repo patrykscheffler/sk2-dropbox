@@ -57,3 +57,11 @@ void server_file_write(int socket) {
 
     get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
 }
+
+void add_server(int port) {
+    FILE *fp = open_file("./server_list.txt", "a");
+
+    fprintf(fp, "%d\n", port);
+
+    close_file(fp);
+}

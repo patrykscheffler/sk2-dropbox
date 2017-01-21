@@ -11,10 +11,16 @@
 
 char *preapare_path(char *directory, char *filename) {
     char *fullpath = (char *) malloc(BUFFER_LEN);
+    struct stat st;
 
     strncpy(fullpath, "./files/", 8);
     strncat(fullpath, directory, BUFFER_LEN - 7);
     strncat(fullpath, "/", BUFFER_LEN - strlen(fullpath));
+
+    if (stat(fullpath, &st) == -1) {
+        mkdir(fullpath, 0700);
+    }
+
     strncat(fullpath, filename, BUFFER_LEN - strlen(fullpath));
 
     return fullpath;

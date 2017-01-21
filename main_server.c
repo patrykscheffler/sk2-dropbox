@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
 
     sockfd = init(info.port);
 
+    add_server(info.port);
+
     printf("Server running on port %d\n", info.port);
 
     while (1) {
