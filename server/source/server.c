@@ -31,7 +31,7 @@ void *server_loop(void *arg) {
 
     read(socket, &message, sizeof(uint16_t));
     message = ntohs(message);
-    printf("Received message: %d\n", message);
+    printf("Received server message: %d\n", message);
 
     if (message == FILE_READ)
         server_file_read(socket);

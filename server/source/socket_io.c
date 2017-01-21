@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <stdint.h>
 #include <netinet/in.h>
 
@@ -12,19 +11,14 @@
 #include "../header/global_data.h"
 
 char *preapare_path(char *directory, char *filename) {
-    char *fullpath = (char *) malloc(BUFFER_LEN);
+    char *fullpath = NULL;
     struct stat st;
-
-    strncpy(fullpath, "./files/", 8);
-    strncat(fullpath, directory, BUFFER_LEN - 7);
-    strncat(fullpath, "/", BUFFER_LEN - strlen(fullpath));
 
     if (stat(fullpath, &st) == -1) {
         mkdir(fullpath, 0700);
     }
 
-    strncat(fullpath, filename, BUFFER_LEN - strlen(fullpath));
-
+    asprintf(&fullpath,"%s%s/%s", "./files/", directory, filename);
     return fullpath;
 }
 
@@ -47,8 +41,9 @@ void close_file(FILE *fp) {
 int does_file_exist(char *fullpath) {
     struct stat st;
     int result = stat(fullpath, &st);
-
-    return result == 0;
+    if (result < 0)
+        return 1;
+    return 0;
 }
 
 /*
@@ -61,6 +56,7 @@ void send_file(int sockfd, char *directory, char *filename) {
     int i;
 
     char *fullpath = preapare_path(directory, filename);
+    printf("send_file path: %s", fullpath);
 
     if (does_file_exist(fullpath)) {
         message = htons(FAILURE);
@@ -109,6 +105,7 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
     char buffer[BUFFER_LEN];
     char *fullpath = preapare_path(directory, filename);
 
+    printf("get_file path: %s", fullpath);
     FILE *fp = open_file(fullpath, "w");
 
     while (read_count <= file_size) {
@@ -154,8 +151,9 @@ void send_file_list(int sockfd, char *directory) {
 
             strcpy(fileInfo.name, ep->d_name);
             strcpy(fileInfo.user, directory);
-            fileInfo.size = htons(size);
+            fileInfo.size = htonl(size);
 
+            printf("List file: %s, %s, %d\n", fileInfo.user, fileInfo.name, st.st_size);
             write(sockfd, &fileInfo, sizeof(fileInfo));
         }
     }
@@ -164,7 +162,7 @@ void send_file_list(int sockfd, char *directory) {
 
     strcpy(fileInfo.name, "");
     strcpy(fileInfo.user, "");
-    fileInfo.size = htons(0);
+    fileInfo.size = htonl(0);
 
     // end list / no files
     write(sockfd, &fileInfo, sizeof(fileInfo));
