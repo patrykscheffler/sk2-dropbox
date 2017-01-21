@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdint.h>
+#include <netinet/in.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
@@ -18,25 +20,23 @@ void create_server_thread(int *socket) {
     }
 }
 
-void* server_loop(void *arg) {
-    int socket = *((int*) arg);
+void *server_loop(void *arg) {
+    int socket = *((int *) arg);
     uint16_t message;
 
     server_info_t serverInfo = {
-        .version = 1,
-        .port = 1234
+            .version = 1,
+            .port = 1234
     };
 
     read(socket, &message, sizeof(uint16_t));
     message = ntohs(message);
     printf("Received message: %d\n", message);
 
-    switch(message) {
-        case FILE_READ:
-            server_file_read(socket);
-        case FILE_WRITE:
-            server_file_write(socket);
-    }
+    if (message == FILE_READ)
+        server_file_read(socket);
+    if (message == FILE_WRITE)
+        server_file_write(socket);
 
     // TODO: receive server info
     // TODO: check version, replicate files
