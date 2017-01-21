@@ -20,12 +20,10 @@ void create_client_thread(int *socket) {
 
 void* client_loop(void *arg) {
     int socket = *((int*) arg);
-    char message;
+    uint16_t message;
 
     read(socket, &message, 1);
-
-    message = FILE_WRITE;
-    printf("Received message: %d\n", message);
+    printf("Received message: %d\n", ntohs(message));
 
     switch(message) {
         case FILE_READ:

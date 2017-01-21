@@ -2,5 +2,8 @@
 #define SK2_DROPBOX_SERVER_H
 
 void create_server_thread(int *socket);
+void* server_loop(void *arg);
+void server_file_read(int socket);
+void server_file_write(int socket);
 
 #endif // SK2_DROPBOX_SERVER_H
