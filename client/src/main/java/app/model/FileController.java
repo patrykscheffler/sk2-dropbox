@@ -11,13 +11,13 @@ public class FileController {
     Client client;
 
     public FileInfo upload(File file) {
-        System.out.println("uploading " + file.getName() + " " + file.length());
+//        System.out.println("uploading " + file.getName() + " " + file.length());
         client.uploadFile(file);
         return new FileInfo(file.getName(), client.getUserName(), file.length());
     }
 
     public void download(FileInfo fileInfo, File file) {
-        System.out.println("downloading " + fileInfo.getFilename());
+//        System.out.println("downloading " + fileInfo.getFilename());
         client.downloadFile(fileInfo, file);
     }
 
@@ -27,12 +27,7 @@ public class FileController {
     }
 
     public List<FileInfo> listServerFiles() {
-        List<FileInfo> personData = new ArrayList<>();
-        personData.add(new FileInfo("test", "test", 2));
-        personData.add(new FileInfo("test2", "test", 3));
-        personData.add(new FileInfo("test3", "test", 4));
-
-        return personData;
+        return client.listFiles();
     }
 
     public Client getClient() {

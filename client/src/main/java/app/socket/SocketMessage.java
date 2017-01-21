@@ -14,9 +14,7 @@ public class SocketMessage {
         this.size = size;
     }
 
-    public static SocketMessage readFromBuffer(InputStream inputStream) throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-
+    public static SocketMessage readFromBuffer(DataInputStream dataInputStream) throws IOException {
         byte[] user = new byte[nameBits];
         dataInputStream.read(user, 0, nameBits);
         byte[] name = new byte[nameBits];
@@ -26,8 +24,10 @@ public class SocketMessage {
         return new SocketMessage(new String(user), new String(name), size);
     }
 
-    public void writeToBuffer(OutputStream outputStream) throws IOException {
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+    public void writeToBuffer(DataOutputStream dataOutputStream) throws IOException {
+        this.user = String.format("%0$-" + nameBits + "s", this.user).substring(0,nameBits-1) + '\0';
+        this.name = String.format("%0$-" + nameBits + "s", this.name).substring(0,nameBits-1) + '\0';
+
         dataOutputStream.write(this.user.getBytes());
         dataOutputStream.write(this.name.getBytes());
         dataOutputStream.writeInt(this.size);
