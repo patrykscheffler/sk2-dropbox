@@ -8,8 +8,6 @@
 #include "../header/global_data.h"
 #include "../header/client.h"
 
-static pthread_mutex_t lock;
-
 void create_client_thread(int *socket) {
     pthread_t client_thread;
     if (pthread_create(&client_thread, NULL, client_loop, socket)) {
@@ -43,7 +41,6 @@ void client_file_read(int socket) {
     read(socket, &fileInfo, sizeof(fileInfo));
 
     send_file(socket, fileInfo.user, fileInfo.name);
-    // TODO: send FAILURE message, when file doesn't exist
 }
 
 void client_file_write(int socket) {
@@ -52,9 +49,7 @@ void client_file_write(int socket) {
 
     get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
 
-    pthread_mutex_init(&lock, NULL);
     // TODO: update server version, replicate file
-    pthread_mutex_destroy(&lock);
 }
 
 void client_list_files(int socket) {

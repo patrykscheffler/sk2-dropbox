@@ -49,7 +49,6 @@ void server_file_read(int socket) {
     read(socket, &fileInfo, sizeof(fileInfo));
 
     send_file(socket, fileInfo.user, fileInfo.name);
-    // TODO: send FAILURE message, when file doesn't exist
 }
 
 void server_file_write(int socket) {

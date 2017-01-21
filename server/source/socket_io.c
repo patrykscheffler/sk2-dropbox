@@ -36,29 +36,45 @@ void close_file(FILE *fp) {
     }
 }
 
+int does_file_exist(char *fullpath) {
+    struct stat st;
+    int result = stat(fullpath, &st);
+
+    return result == 0;
+}
+
 /*
  * Write file with name 'filename' in 'directory' to socket 'socketfd'
  */
 void send_file(int sockfd, char *directory, char *filename) {
     char buffer[BUFFER_LEN];
     int bufsize = BUFFER_LEN;
+    uint16_t message;
     int i;
 
     char *fullpath = preapare_path(directory, filename);
 
-    FILE *fp = open_file(fullpath, "r");
+    if (does_file_exist(fullpath)) {
+        message = FAILURE;
+        write(sockfd, &message, sizeof(uint16_t));
+    } else {
+        message = ACCEPT;
+        write(sockfd, &message, sizeof(uint16_t));
 
-    while ((i = fread(buffer, 1, bufsize, fp))) {
-        if (ferror(fp)) {
-            fprintf(stderr, "A read error occured.\n");
-            Close(sockfd);
-            exit(1);
+        FILE *fp = open_file(fullpath, "r");
+
+        while ((i = fread(buffer, 1, bufsize, fp))) {
+            if (ferror(fp)) {
+                fprintf(stderr, "A read error occured.\n");
+                Close(sockfd);
+                exit(1);
+            }
+
+            write(sockfd, &buffer, i);
         }
 
-        write(sockfd, &buffer, i);
+        close_file(fp);
     }
-
-    close_file(fp);
 }
 
 /*
@@ -144,7 +160,4 @@ void send_file_list(int sockfd, char *directory) {
 
     // end list / no files
     write(sockfd, &fileInfo, sizeof(fileInfo));
-
-    // TODO: send file list
-    // write(sockfd, &buffer, i);
 }
