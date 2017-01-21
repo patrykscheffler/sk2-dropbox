@@ -5,20 +5,44 @@
 #include <sys/stat.h>
 #include <stdint.h>
 #include <netinet/in.h>
+#include <ctype.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
 #include "../header/global_data.h"
 
+char *trimwhitespace(char *str) {
+    char *end;
+
+    // Trim leading space
+    while (isspace((unsigned char) *str)) str++;
+
+    if (*str == 0)  // All spaces?
+        return str;
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char) *end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = 0;
+
+    return str;
+}
+
 char *preapare_path(char *directory, char *filename) {
     char *fullpath = NULL;
     struct stat st;
 
-    if (stat(fullpath, &st) == -1) {
-        mkdir(fullpath, 0700);
-    }
+    char *dir = trimwhitespace(directory);
+    char *filen = trimwhitespace(filename);
 
-    asprintf(&fullpath,"%s%s/%s", "./files/", directory, filename);
+    char *tmpPath = NULL;
+    asprintf(&tmpPath, "%s%s", "./files/", dir);
+    if (stat(tmpPath, &st) == -1) {
+        mkdir(tmpPath, 0700);
+    }
+    asprintf(&fullpath, "%s/%s", tmpPath, filen);
     return fullpath;
 }
 
@@ -139,7 +163,7 @@ void send_file_list(int sockfd, char *directory) {
     dp = opendir(fullpath);
 
     if (dp == NULL) {
-        perror ("Couldn't open the directory");
+        perror("Couldn't open the directory");
         exit(1);
     }
 
@@ -158,7 +182,7 @@ void send_file_list(int sockfd, char *directory) {
         }
     }
 
-    closedir (dp);
+    closedir(dp);
 
     strcpy(fileInfo.name, "");
     strcpy(fileInfo.user, "");
