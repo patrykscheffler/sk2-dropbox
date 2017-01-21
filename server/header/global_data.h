@@ -6,8 +6,15 @@
 #define BUFFER_LEN 256
 #define MAX_FILE_NAME 64
 #define MAX_USER_NAME 64
-
 #define DEBUG 1
+
+static const char CLIENT_CONN = 0x01;
+static const char SERVER_CONN = 0x02;
+static const char FILE_READ = 0xF1;
+static const char FILE_WRITE = 0xF2;
+static const char LIST_FILES = 0xF3;
+static const char ACCEPT = 0x00;
+static const char FAILURE = 0xFF;
 
 typedef struct client_connection_info {
     int socket;

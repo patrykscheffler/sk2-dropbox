@@ -10,12 +10,6 @@
 
 static pthread_mutex_t lock;
 
-const char FILE_READ = 0xF1;
-const char FILE_WRITE = 0xF2;
-const char LIST_FILES = 0xF3;
-
-const char FAILURE = 0xFF;
-
 void create_client_thread(int *socket) {
     pthread_t client_thread;
     if (pthread_create(&client_thread, NULL, client_loop, socket)) {
@@ -26,31 +20,21 @@ void create_client_thread(int *socket) {
 
 void* client_loop(void *arg) {
     int socket = *((int*) arg);
-    char message[BUFFER_LEN];
+    char message;
 
-    file_info_t fileInfo = {
-        .user = "mike",
-        .name = "test.txt",
-        .size = htonl(1231231231)
-    };
+    read(socket, &message, 1);
 
-    read(socket, message, BUFFER_LEN);
-    printf("Received message: %s\n", message);
+    message = FILE_WRITE;
+    printf("Received message: %d\n", message);
 
-    printf("Sending %s/%s, %d, %lu\n", fileInfo.user, fileInfo.name, fileInfo.size, sizeof(fileInfo));
-    write(socket, &fileInfo, sizeof(fileInfo));
-
-    // char message;
-    // while(read(socket, message, 1) {
-    //     switch(message) {
-    //         case FILE_READ:
-    //             client_file_read(socket);
-    //         case FILE_WRITE:
-    //             client_file_write(socket);
-    //         case LIST_FILES:
-    //             client_list_files(socket);
-    //     }
-    // }
+    switch(message) {
+        case FILE_READ:
+            client_file_read(socket);
+        case FILE_WRITE:
+            client_file_write(socket);
+        case LIST_FILES:
+            client_list_files(socket);
+    }
 
     Close(socket);
     pthread_exit(NULL);
