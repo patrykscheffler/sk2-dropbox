@@ -13,6 +13,7 @@ static const uint16_t SERVER_CONN = 0x02;
 static const uint16_t FILE_READ = 0xF1;
 static const uint16_t FILE_WRITE = 0xF2;
 static const uint16_t LIST_FILES = 0xF3;
+static const uint16_t FILE_REMOVE = 0xF4;
 static const uint16_t ACCEPT = 0x00;
 static const uint16_t FAILURE = 0xFF;
 

@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
     sockfd = init(info.port);
 
-    add_server(info.port);
+    // add_server(info.port);
 
     printf("Server running on port %d\n", info.port);
 
@@ -44,7 +44,6 @@ int main(int argc, char *argv[]) {
         read(clientSockFd, &message, sizeof(uint16_t));
         message = ntohs(message);
         printf("Received message: %d\n", message);
-
 
         if (message == CLIENT_CONN)
             create_client_thread(&clientSockFd);

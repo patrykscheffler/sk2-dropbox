@@ -31,6 +31,8 @@ void *client_loop(void *arg) {
         client_file_write(socket);
     if (message == LIST_FILES)
         client_list_files(socket);
+    if (message == FILE_REMOVE)
+        client_remove_file(socket);
 
     Close(socket);
     pthread_exit(NULL);
@@ -52,7 +54,7 @@ void client_file_write(int socket) {
     get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
 
     // TODO: update server version, replicate file
-    // replicate_file(fileInfo);
+    replicate_file(fileInfo);
 }
 
 void client_list_files(int socket) {
@@ -83,4 +85,11 @@ void replicate_file(file_info_t fileInfo) {
     }
 
     close_file(fp);
+}
+
+void client_remove_file(int socket) {
+    file_info_t fileInfo;
+    read(socket, &fileInfo, sizeof(fileInfo));
+
+    remove_file(socket, fileInfo.user, fileInfo.name);
 }
