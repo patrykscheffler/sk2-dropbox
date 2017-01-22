@@ -67,7 +67,7 @@ void client_list_files(int socket) {
 void replicate_file(file_info_t fileInfo) {
     FILE *fp = open_file("./server_list.txt", "r");
     struct sockaddr_in sck_addr;
-    uint16_t message = htons(SERVER_CONN);
+    uint16_t message;
     int socket, port;
 
     while (fscanf(fp, "%d", &port) != EOF) {
@@ -78,8 +78,16 @@ void replicate_file(file_info_t fileInfo) {
         sck_addr.sin_port = htons(port);
 
         socket = Socket(AF_INET, SOCK_STREAM, 0);
+        Connect(socket, (struct sockaddr*) &sck_addr, sizeof(sck_addr));
 
+        message = htons(SERVER_CONN);
         write(socket, &message, sizeof(uint16_t));
+
+        message = htons(FILE_WRITE);
+        write(socket, &message, sizeof(uint16_t));
+
+        write(socket, &fileInfo, sizeof(fileInfo));
+
         send_file(socket, fileInfo.user, fileInfo.name);
 
         Close(socket);
