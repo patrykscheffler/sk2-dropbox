@@ -71,6 +71,7 @@ void replicate_file(file_info_t fileInfo) {
     int socket, port;
 
     while (fscanf(fp, "%d", &port) != EOF) {
+        printf("Replicate %s to 127.0.0.1:%d\n", fileInfo.name, port);
         memset(&sck_addr, 0, sizeof sck_addr);
         sck_addr.sin_family = AF_INET;
         inet_aton("127.0.0.1", &sck_addr.sin_addr);

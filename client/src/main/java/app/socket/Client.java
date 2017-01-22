@@ -14,6 +14,7 @@ public class Client {
     public final static short FILE_READ = 0xF1;
     public final static short FILE_WRITE = 0xF2;
     public final static short LIST_FILES = 0xF3;
+    public final static short FILE_REMOVE = 0xF4;
     public final static short ACCEPT = 0x00;
     public final static short FAILURE = 0xFF;
     private String hostName;
@@ -107,16 +108,22 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        List<FileInfo> fileData = new ArrayList<>();
-//        fileData.add(new FileInfo("test", "test", 2));
-//        fileData.add(new FileInfo("test2", "test", 3));
-//        fileData.add(new FileInfo("test3", "test", 4));
 
         return fileInfos;
     }
 
     public void removeFile(FileInfo fileInfo) {
-//        TODO
+       try {
+            openConnection();
+            SocketMessage socketMessage = new SocketMessage(this.userName, fileInfo.getFilename(), Math.toIntExact(fileInfo.getSize()));
+
+            this.toServer.write(ByteBuffer.allocate(2).putShort(FILE_REMOVE).array());
+            socketMessage.writeToBuffer(this.toServer);
+
+            closeConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeBufferToFile(File file, int size) throws IOException {
