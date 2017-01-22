@@ -32,12 +32,12 @@ char *trimwhitespace(char *str) {
 
 char *preapare_path(char *directory, char *filename) {
     char *fullpath = NULL;
+    char *tmpPath = NULL;
     struct stat st;
 
     char *dir = trimwhitespace(directory);
     char *filen = trimwhitespace(filename);
 
-    char *tmpPath = NULL;
     asprintf(&tmpPath, "%s%s", "./files/", dir);
     if (stat(tmpPath, &st) == -1) {
         mkdir(tmpPath, 0700);
@@ -126,7 +126,7 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
     char buffer[BUFFER_LEN];
     char *fullpath = preapare_path(directory, filename);
 
-    printf("get_file path: %s", fullpath);
+    printf("get_file path: %s\n", fullpath);
     FILE *fp = open_file(fullpath, "w");
 
     while (read_count <= file_size) {
@@ -143,7 +143,7 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
         }
     }
 
-    close_file(fp);
+    // close_file(fp);
 }
 
 /*
@@ -165,16 +165,19 @@ void send_file_list(int sockfd, char *directory) {
     }
 
     while ((ep = readdir(dp))) {
+        memset(fileInfo.name, 0, sizeof(fileInfo.name));
+        memset(fileInfo.user, 0, sizeof(fileInfo.user));
+
         if (ep->d_name[0] != '.') {
             fullpath = preapare_path(directory, ep->d_name);
             stat(fullpath, &st);
             size = st.st_size;
 
-            strcpy(fileInfo.name, ep->d_name);
-            strcpy(fileInfo.user, directory);
+            sprintf(fileInfo.name, "%s", ep->d_name);
+            sprintf(fileInfo.user, "%s", directory);
             fileInfo.size = htonl(size);
 
-            printf("List file: %s, %s, %d\n", fileInfo.user, fileInfo.name, st.st_size);
+            printf("List file: %s, %s, %lld\n", fileInfo.user, fileInfo.name, st.st_size);
             write(sockfd, &fileInfo, sizeof(fileInfo));
         }
     }
