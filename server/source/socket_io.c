@@ -3,28 +3,46 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <stdint.h>
 #include <netinet/in.h>
+#include <ctype.h>
 
 #include "../header/socket_io.h"
 #include "../header/socket_err_check.h"
 #include "../header/global_data.h"
 
+char *trimwhitespace(char *str) {
+    char *end;
+
+    // Trim leading space
+    while (isspace((unsigned char) *str)) str++;
+
+    if (*str == 0)  // All spaces?
+        return str;
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char) *end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = 0;
+
+    return str;
+}
+
 char *preapare_path(char *directory, char *filename) {
-    char *fullpath = (char *) malloc(BUFFER_LEN);
+    char *fullpath = NULL;
     struct stat st;
 
-    strncpy(fullpath, "./files/", 8);
-    strncat(fullpath, directory, BUFFER_LEN - 7);
-    strncat(fullpath, "/", BUFFER_LEN - strlen(fullpath));
+    char *dir = trimwhitespace(directory);
+    char *filen = trimwhitespace(filename);
 
-    if (stat(fullpath, &st) == -1) {
-        mkdir(fullpath, 0700);
+    char *tmpPath = NULL;
+    asprintf(&tmpPath, "%s%s", "./files/", dir);
+    if (stat(tmpPath, &st) == -1) {
+        mkdir(tmpPath, 0700);
     }
-
-    strncat(fullpath, filename, BUFFER_LEN - strlen(fullpath));
-
+    asprintf(&fullpath, "%s/%s", tmpPath, filen);
     return fullpath;
 }
 
@@ -46,9 +64,7 @@ void close_file(FILE *fp) {
 
 int does_file_exist(char *fullpath) {
     struct stat st;
-    int result = stat(fullpath, &st);
-
-    return result == 0;
+    return stat(fullpath, &st);
 }
 
 /*
@@ -61,6 +77,7 @@ void send_file(int sockfd, char *directory, char *filename) {
     int i;
 
     char *fullpath = preapare_path(directory, filename);
+    printf("send_file path: %s", fullpath);
 
     if (does_file_exist(fullpath)) {
         message = htons(FAILURE);
@@ -109,6 +126,7 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
     char buffer[BUFFER_LEN];
     char *fullpath = preapare_path(directory, filename);
 
+    printf("get_file path: %s", fullpath);
     FILE *fp = open_file(fullpath, "w");
 
     while (read_count <= file_size) {
@@ -142,7 +160,7 @@ void send_file_list(int sockfd, char *directory) {
     dp = opendir(fullpath);
 
     if (dp == NULL) {
-        perror ("Couldn't open the directory");
+        perror("Couldn't open the directory");
         exit(1);
     }
 
@@ -154,17 +172,18 @@ void send_file_list(int sockfd, char *directory) {
 
             strcpy(fileInfo.name, ep->d_name);
             strcpy(fileInfo.user, directory);
-            fileInfo.size = htons(size);
+            fileInfo.size = htonl(size);
 
+            printf("List file: %s, %s, %d\n", fileInfo.user, fileInfo.name, st.st_size);
             write(sockfd, &fileInfo, sizeof(fileInfo));
         }
     }
 
-    closedir (dp);
+    closedir(dp);
 
     strcpy(fileInfo.name, "");
     strcpy(fileInfo.user, "");
-    fileInfo.size = htons(0);
+    fileInfo.size = htonl(0);
 
     // end list / no files
     write(sockfd, &fileInfo, sizeof(fileInfo));

@@ -19,11 +19,11 @@ void create_client_thread(int *socket) {
 
 void *client_loop(void *arg) {
     int socket = *((int *) arg);
-    uint16_t message;
+    uint16_t message = 0;
 
     read(socket, &message, sizeof(uint16_t));
     message = ntohs(message);
-    printf("Received message: %d\n", message);
+    printf("Received client message: %d\n", message);
 
     if (message == FILE_READ)
         client_file_read(socket);
@@ -37,6 +37,7 @@ void *client_loop(void *arg) {
 }
 
 void client_file_read(int socket) {
+    printf("client read\n");
     file_info_t fileInfo;
     read(socket, &fileInfo, sizeof(fileInfo));
 
@@ -44,6 +45,7 @@ void client_file_read(int socket) {
 }
 
 void client_file_write(int socket) {
+    printf("client write\n");
     file_info_t fileInfo;
     read(socket, &fileInfo, sizeof(fileInfo));
 

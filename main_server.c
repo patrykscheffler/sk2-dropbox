@@ -15,10 +15,10 @@
 int init();
 
 int main(int argc, char *argv[]) {
-    int sockfd, clientSockFd;
+    int sockfd;
     struct sockaddr_in cli_addr;
     socklen_t nTmp = sizeof(cli_addr);
-    uint16_t message;
+//    uint16_t message;
 
     server_info_t info = {
             .version = 1,
@@ -37,8 +37,9 @@ int main(int argc, char *argv[]) {
     printf("Server running on port %d\n", info.port);
 
     while (1) {
-        clientSockFd = Accept(sockfd, (struct sockaddr *) &cli_addr, &nTmp);
+        int clientSockFd = Accept(sockfd, (struct sockaddr *) &cli_addr, &nTmp);
         printf("%s: [connection from %s]\n", argv[0], inet_ntoa(cli_addr.sin_addr));
+        uint16_t message;
 
         read(clientSockFd, &message, sizeof(uint16_t));
         message = ntohs(message);

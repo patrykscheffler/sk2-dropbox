@@ -55,8 +55,7 @@ public class Home {
             return;
 
         FileInfo fileInfo = fileController.upload(file);
-        if (fileInfo != null)
-            mainApp.addFileData(fileInfo);
+        getServerFileList();
     }
 
     @FXML
