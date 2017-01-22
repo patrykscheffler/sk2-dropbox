@@ -37,6 +37,8 @@ void *server_loop(void *arg) {
         server_file_read(socket);
     if (message == FILE_WRITE)
         server_file_write(socket);
+    if (message == FILE_REMOVE)
+        server_remove_file(socket);
 
     // TODO: receive server info
     // TODO: check version, replicate files
@@ -57,6 +59,13 @@ void server_file_write(int socket) {
     read(socket, &fileInfo, sizeof(fileInfo));
 
     get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+}
+
+void server_remove_file(int socket) {
+    file_info_t fileInfo;
+    read(socket, &fileInfo, sizeof(fileInfo));
+
+    remove_file(socket, fileInfo.user, fileInfo.name);
 }
 
 void add_server(int port) {

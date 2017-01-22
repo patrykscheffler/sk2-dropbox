@@ -6,5 +6,6 @@ void* server_loop(void *arg);
 void server_file_read(int socket);
 void server_file_write(int socket);
 void add_server(int port);
+void server_remove_file(int socket);
 
 #endif // SK2_DROPBOX_SERVER_H

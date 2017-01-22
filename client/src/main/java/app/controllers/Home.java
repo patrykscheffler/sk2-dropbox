@@ -78,6 +78,7 @@ public class Home {
             return;
 
         fileController.remove(fileInfo);
+        getServerFileList();
     }
 
     public void setMainApp(Main mainApp) {

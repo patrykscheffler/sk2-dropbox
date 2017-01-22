@@ -6,7 +6,7 @@ void* client_loop(void *arg);
 void client_file_read(int socket);
 void client_file_write(int socket);
 void client_list_files(int socket);
-int valid_file_request(char* request);
+void client_remove_file(int socket);
 void replicate_file(file_info_t fileInfo);
 
 #endif // SK2_DROPBOX_CLIENT_H
