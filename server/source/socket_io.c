@@ -109,12 +109,10 @@ void send_file(int sockfd, char *directory, char *filename) {
 int buffer2file(FILE *fp, char *buffer, int length) {
     fwrite(buffer, length, 1, fp);
 
-    printf("1\n");
     if (ferror(fp)) {
         fprintf(stderr, "A write error occured.\n");
         return 0;
     }
-    printf("1\n");
 
     return 1;
 }
