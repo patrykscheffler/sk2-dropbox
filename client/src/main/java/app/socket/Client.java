@@ -4,6 +4,7 @@ import app.model.FileInfo;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,16 @@ public class Client {
         this.socket = new Socket(this.hostName, this.port);
         this.toServer = new DataOutputStream(this.socket.getOutputStream());
         this.fromServer = new DataInputStream(this.socket.getInputStream());
-        this.toServer.writeShort(CLIENT_CONN);
+
+        byte[] bytes = ByteBuffer.allocate(2).putShort(CLIENT_CONN).array();
+
+//        for (byte b : bytes) {
+//            System.out.println(b);
+//        }
+
+//        System.out.println();
+//        System.out.println(ByteBuffer.wrap(bytes).getShort());
+        this.toServer.write(bytes);
     }
 
     public void closeConnection() {
@@ -50,7 +60,7 @@ public class Client {
             openConnection();
             SocketMessage socketMessage = new SocketMessage(this.userName, file.getName(), Math.toIntExact(file.length()));
 
-            this.toServer.writeShort(FILE_WRITE);
+            this.toServer.write(ByteBuffer.allocate(2).putShort(FILE_WRITE).array());
             socketMessage.writeToBuffer(this.toServer);
             writeFileToBuffer(file);
 
@@ -65,7 +75,7 @@ public class Client {
             openConnection();
             SocketMessage socketMessage = new SocketMessage(this.userName, fileInfo.getFilename(), Math.toIntExact(fileInfo.getSize()));
 
-            this.toServer.writeShort(FILE_READ);
+            this.toServer.write(ByteBuffer.allocate(2).putShort(FILE_READ).array());
             socketMessage.writeToBuffer(this.toServer);
 
             short resp = this.fromServer.readShort();
@@ -83,7 +93,7 @@ public class Client {
         List<FileInfo> fileInfos = new ArrayList<>();
         try {
             openConnection();
-            this.toServer.writeShort(LIST_FILES);
+            this.toServer.write(ByteBuffer.allocate(2).putShort(LIST_FILES).array());
             SocketMessage socketMessage;
 
             socketMessage = new SocketMessage(this.userName, "", 0);
