@@ -109,10 +109,12 @@ void send_file(int sockfd, char *directory, char *filename) {
 int buffer2file(FILE *fp, char *buffer, int length) {
     fwrite(buffer, length, 1, fp);
 
+    printf("1\n");
     if (ferror(fp)) {
         fprintf(stderr, "A write error occured.\n");
         return 0;
     }
+    printf("1\n");
 
     return 1;
 }
@@ -135,7 +137,6 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
         }
 
         if ((n = read(sockfd, buffer, read_size)) <= 0) {
-            Close(sockfd);
             break;
         } else {
             buffer2file(fp, buffer, n);
@@ -143,7 +144,7 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
         }
     }
 
-    // close_file(fp);
+    close_file(fp);
 }
 
 /*
