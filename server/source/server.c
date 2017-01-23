@@ -49,14 +49,14 @@ void *server_loop(void *arg) {
 
 void server_file_read(int socket) {
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     send_file(socket, fileInfo.user, fileInfo.name);
 }
 
 void server_file_write(int socket) {
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     if (strcmp(fileInfo.name, "")) {
         get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
@@ -65,7 +65,7 @@ void server_file_write(int socket) {
 
 void server_remove_file(int socket) {
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     remove_file(socket, fileInfo.user, fileInfo.name);
 }
