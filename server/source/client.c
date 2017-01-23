@@ -69,17 +69,20 @@ void client_list_files(int socket) {
 }
 
 void replicate_file(file_info_t fileInfo) {
-    FILE *fp = open_file("./server_list.txt", "r");
+    FILE *fp;
     struct sockaddr_in sck_addr;
     uint16_t message;
     int socket, port;
-    char *address;
-    file_info_t fileInfoCopy;
+    char address[15];
+    memset(address, ' ', 15);
 
+    file_info_t fileInfoCopy;
     fileInfoCopy.size = fileInfo.size;
     strcpy(fileInfoCopy.user, fileInfo.user);
     strcpy(fileInfoCopy.name, fileInfo.name);
 
+
+    fp = open_file("server_list.txt", "r");
     while (fscanf(fp, "%s %d", address, &port) != EOF) {
         printf("Replicate %s to %s:%d\n", fileInfo.name, address, port);
         memset(&sck_addr, 0, sizeof sck_addr);
