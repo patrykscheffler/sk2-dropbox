@@ -121,7 +121,9 @@ void remove_file(int sockfd, char *directory, char *filename) {
     char *fullpath = preapare_path(directory, filename);
     printf("remove_file path: %s", fullpath);
 
-    remove(fullpath);
+    if (!does_file_exist(fullpath)) {
+        remove(fullpath);
+    }
 }
 
 /*
@@ -132,11 +134,13 @@ void get_file(int sockfd, char *directory, char *filename, int file_size) {
     int read_count = 0;
     char buffer[BUFFER_LEN];
     char *fullpath = preapare_path(directory, filename);
+    FILE *fp;
 
     printf("get_file path: %s\n", fullpath);
-    FILE *fp = open_file(fullpath, "w");
 
     if (!does_file_exist(fullpath)) {
+        fp = open_file(fullpath, "w");
+
         while (read_count <= file_size) {
             if ((read_size = file_size - read_count) > BUFFER_LEN) {
                 read_size = BUFFER_LEN;

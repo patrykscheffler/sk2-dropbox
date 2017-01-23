@@ -51,7 +51,11 @@ void client_file_write(int socket) {
     file_info_t fileInfo;
     read(socket, &fileInfo, sizeof(fileInfo));
 
-    get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+    printf("%s %s %d\n", fileInfo.user, fileInfo.name, fileInfo.size);
+
+    if (strcmp(fileInfo.name, "")) {
+        get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+    }
 
     // TODO: update server version, replicate file
     replicate_file(fileInfo);
@@ -69,12 +73,18 @@ void replicate_file(file_info_t fileInfo) {
     struct sockaddr_in sck_addr;
     uint16_t message;
     int socket, port;
+    char *address;
+    file_info_t fileInfoCopy;
 
-    while (fscanf(fp, "%d", &port) != EOF) {
-        printf("Replicate %s to 127.0.0.1:%d\n", fileInfo.name, port);
+    fileInfoCopy.size = fileInfo.size;
+    strcpy(fileInfoCopy.user, fileInfo.user);
+    strcpy(fileInfoCopy.name, fileInfo.name);
+
+    while (fscanf(fp, "%s %d", address, &port) != EOF) {
+        printf("Replicate %s to %s:%d\n", fileInfo.name, address, port);
         memset(&sck_addr, 0, sizeof sck_addr);
         sck_addr.sin_family = AF_INET;
-        inet_aton("127.0.0.1", &sck_addr.sin_addr);
+        inet_aton(address, &sck_addr.sin_addr);
         sck_addr.sin_port = htons(port);
 
         socket = Socket(AF_INET, SOCK_STREAM, 0);
@@ -86,9 +96,9 @@ void replicate_file(file_info_t fileInfo) {
         message = htons(FILE_WRITE);
         write(socket, &message, sizeof(uint16_t));
 
-        write(socket, &fileInfo, sizeof(fileInfo));
+        write(socket, &fileInfoCopy, sizeof(fileInfoCopy));
 
-        send_file(socket, fileInfo.user, fileInfo.name);
+        send_file(socket, fileInfoCopy.user, fileInfoCopy.name);
 
         Close(socket);
     }
