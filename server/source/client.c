@@ -21,7 +21,7 @@ void *client_loop(void *arg) {
     int socket = *((int *) arg);
     uint16_t message = 0;
 
-    read(socket, &message, sizeof(uint16_t));
+    recv(socket, &message, sizeof(uint16_t), MSG_WAITALL);
     message = ntohs(message);
     printf("Received client message: %d\n", message);
 
@@ -41,7 +41,7 @@ void *client_loop(void *arg) {
 void client_file_read(int socket) {
     printf("client read\n");
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     send_file(socket, fileInfo.user, fileInfo.name);
 }
@@ -49,7 +49,7 @@ void client_file_read(int socket) {
 void client_file_write(int socket) {
     printf("client write\n");
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     printf("%s %s %d\n", fileInfo.user, fileInfo.name, fileInfo.size);
 
@@ -63,7 +63,7 @@ void client_file_write(int socket) {
 
 void client_list_files(int socket) {
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     send_file_list(socket, fileInfo.user);
 }
@@ -111,7 +111,7 @@ void replicate_file(file_info_t fileInfo) {
 
 void client_remove_file(int socket) {
     file_info_t fileInfo;
-    read(socket, &fileInfo, sizeof(fileInfo));
+    recv(socket, &fileInfo, sizeof(file_info_t), MSG_WAITALL);
 
     remove_file(socket, fileInfo.user, fileInfo.name);
 }
