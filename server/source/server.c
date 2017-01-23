@@ -58,7 +58,9 @@ void server_file_write(int socket) {
     file_info_t fileInfo;
     read(socket, &fileInfo, sizeof(fileInfo));
 
-    get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+    if (strcmp(fileInfo.name, "")) {
+        get_file(socket, fileInfo.user, fileInfo.name, fileInfo.size);
+    }
 }
 
 void server_remove_file(int socket) {

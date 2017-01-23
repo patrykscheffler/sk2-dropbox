@@ -64,4 +64,3 @@ compile_commands.json
 CTestTestfile.cmake
 
 sk2_dropbox
-files/*
